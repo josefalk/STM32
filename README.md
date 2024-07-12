@@ -19,4 +19,17 @@ int getRandomValue(int low = 50, int high = 700) {
 }
 ```
 
+### Function: Non-blocking delay function using SysTick:
 
+```
+// Non-blocking delay function using SysTick
+void user_delay(uint32_t milliseconds)
+{
+    uint32_t start = HAL_GetTick();  // Get current tick count
+
+    // Wait until specified milliseconds elapse
+    while ((HAL_GetTick() - start) < milliseconds) {
+        // Waiting loop
+    }
+}
+```
