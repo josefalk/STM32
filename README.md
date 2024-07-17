@@ -35,7 +35,7 @@ void user_delay(uint32_t milliseconds)
 ```
 
 
-### Funcition Enable virtual console:
+### Funcition to Enable virtual console:
 
 userConsole.h
 ```
@@ -133,5 +133,22 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 2 */
 
+}
+```
+
+Turn on/off LED 
+```
+ while (1)
+  {
+      HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+      HAL_Delay(500);
+      HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+      HAL_Delay(500);
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
 ```
