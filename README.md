@@ -105,6 +105,8 @@ Use the function in main.c
 Verify the below uart confiugation in main.c (it should be there by default)
 
 ```
+#include "userConsole.h"
+
 static void MX_USART2_UART_Init(void)
 {
 
