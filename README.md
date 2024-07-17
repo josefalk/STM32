@@ -33,3 +33,105 @@ void user_delay(uint32_t milliseconds)
     }
 }
 ```
+
+
+### Funcition Enable virtual console:
+
+userConsole.h
+```
+#ifndef USER_CONSOLE_H
+#define USER_CONSOLE_H
+
+#ifdef __cplusplus
+#endif
+
+#include "stm32l4xx_hal.h"
+
+/* In C and C++, default argument values
+ * are not part of the C standard
+ * but are part of the C++ standard.
+ * Therefore, if you want to provide
+ * a default value for an argument
+ * in a header file, you should use
+ * C++ and ensure the compiler treats
+ * your source files as C++ code.
+ * If you use C language, remove the default assignment.
+ *
+ */
+
+// Declaration of userConsole with default argument value
+
+void userConsole(const char *msg);
+
+
+
+#ifdef __cplusplus
+
+#endif
+
+#endif // USER_CONSOLE_H
+```
+
+UserConsole.cpp
+
+```
+#include "main.h"
+#include "stm32l4xx_hal.h"
+#include <cstring>  // Include for strlen in C++
+
+
+
+// huart2 is declared as an external variable
+extern UART_HandleTypeDef huart2;
+
+
+void userConsole(const char *msg = "Hello, World!\r\n")
+{
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
+
+}
+
+```
+Use the function in main.c
+```
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+      userConsole("Hello World! \r\n");
+       HAL_Delay(1000);
+    /* USER CODE END WHILE */
+```
+
+Verify the below uart confiugation in main.c (it should be there by default)
+
+```
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+```
