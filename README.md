@@ -186,29 +186,84 @@ Turn on/off LED
 
 ## I2C Scanner
 
+### userI2cScan.h
 ```
- 	printf("Scanning I2C bus:\r\n");
-	HAL_StatusTypeDef result;
- 	uint8_t i;
- 	for (i=1; i<128; i++)
- 	{
- 	  /*
- 	   * the HAL wants a left aligned i2c address
- 	   * &hi2c1 is the handle
- 	   * (uint16_t)(i<<1) is the i2c address left aligned
- 	   * retries 2
- 	   * timeout 2
- 	   */
- 	  result = HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t)(i<<1), 2, 2);
- 	  if (result != HAL_OK) // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
- 	  {
- 		  printf("."); // No ACK received at that address
- 	  }
- 	  if (result == HAL_OK)
- 	  {
- 		  printf("0x%X", i); // Received an ACK at that address
- 	  }
- 	}
- 	printf("\r\n");
+#ifndef USER_I2C_SCAN_H
+#define USER_I2C_SCAN_H
+
+#include "stm32h7xx_hal.h"  // Include the HAL library for the HAL_StatusTypeDef and I2C functions
+
+void scanI2cBus(I2C_HandleTypeDef *hi2c);
+
+#endif // USER_I2C_SCAN_H
+
+```
+### userI2cScan.cpp
+```
+#include "userI2cScan.h"
+#include <cstdio>
+#include <cstring>  // Include for strlen
+
+
+/* Update stm32l4xx_hal.h to your hal driver
+ * Dont forget to replace &huart2 in case
+ * it is different. find the correct uart handle
+ * in main.c
+ * replace huart2 in 3 place in this file if required
+ */
+
+// External declaration of the UART handle
+extern UART_HandleTypeDef huart3;
+
+// Custom function to send a string via UART
+void uartSendString(const char *str) {
+    HAL_UART_Transmit(&huart3, (uint8_t*)str, strlen(str), HAL_MAX_DELAY);
+}
+
+// Custom function to send a character via UART
+void uartSendChar(char ch) {
+    HAL_UART_Transmit(&huart3, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+}
+
+void scanI2cBus(I2C_HandleTypeDef *hi2c) {
+    uartSendString("Scanning I2C bus:\r\n");
+    HAL_StatusTypeDef result;
+    char buffer[10];  // Buffer to hold the address in hex format
+    for (uint8_t i = 1; i < 128; i++) {
+        /*
+         * the HAL wants a left aligned i2c address
+         * &hi2c is the handle
+         * (uint16_t)(i << 1) is the i2c address left aligned
+         * retries 2
+         * timeout 2
+         */
+        result = HAL_I2C_IsDeviceReady(hi2c, (uint16_t)(i << 1), 2, 2);
+        if (result != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
+            uartSendChar('.'); // No ACK received at that address
+        }
+        if (result == HAL_OK) {
+            sprintf(buffer, "0x%X ", i); // Received an ACK at that address
+            uartSendString(buffer);
+        }
+    }
+    uartSendString("\r\n");
+}
+
+```
+### userI2cScan.cpp
+
+```
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include "userI2cScan.h"
+/* USER CODE END Includes */
+   while (1)
+  {
+       // Scan the I2C bus
+       scanI2cBus(&hi2c1);
+    /* USER CODE END WHILE */
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
 ```
