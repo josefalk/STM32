@@ -49,7 +49,10 @@ userConsole.h
 
 #ifdef __cplusplus
 #endif
-
+/* Update stm32l4xx_hal.h to your hal driver
+ * for NUCLEO-L432KC stm32l4xx_hal.h
+ * FOR NUCLEO-H723ZG stm32h7xx_hal.h
+ */
 #include "stm32l4xx_hal.h"
 
 /* In C and C++, default argument values
@@ -60,7 +63,7 @@ userConsole.h
  * in a header file, you should use
  * C++ and ensure the compiler treats
  * your source files as C++ code.
- * If you use C language, remove the default assignment.
+ * If you use C language, remove the default assignment (if nay).
  *
  */
 
@@ -68,7 +71,12 @@ userConsole.h
 
 void userConsole(const char *msg);
 
+/* If you are using C, you neeed to remove the below 
+ * function decleration. It work only on C++
+ * this in case you want to use it for numbers.
+ */
 
+void userConsole(int);
 
 #ifdef __cplusplus
 
@@ -83,8 +91,16 @@ UserConsole.cpp
 #include "main.h"
 #include "stm32l4xx_hal.h"
 #include <cstring>  // Include for strlen in C++
+#include <cstdio>
 
-
+/* Update stm32l4xx_hal.h to your hal driver
+ * for NUCLEO-L432KC stm32l4xx_hal.h
+ * FOR NUCLEO-H723ZG stm32h7xx_hal.h
+ * Dont forget to replace &huart2 in case
+ * it is different. find the correct uart handle
+ * in main.c
+ * replace huart2 in 3 place in this file if required
+ */
 
 // huart2 is declared as an external variable
 extern UART_HandleTypeDef huart2;
