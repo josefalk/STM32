@@ -76,3 +76,18 @@ void DRV8833_EscalateRunForward(TIM_HandleTypeDef* htim2, uint32_t channel, uint
         HAL_Delay(stepDelay);  // Delay to allow visible effect of the change
     }
 }
+
+/*
+ *    // Try to start the driver
+      DRV8833_StartDriver();
+      DRV8833_RunForward(&htim2, 500);  // Run forward with 50% duty cycle
+      DRV8833_RunReverse(&htim2, 500);  // Run reverse with 50% duty cycle
+      DRV8833_StopMotor(&htim2);        // Stop the motor
+      DRV8833_RunForward100(&htim2);    // Run forward with 100% duty cycle
+      DRV8833_RunReverse100(&htim2);    // Run reverse with 100% duty cycle
+      DRV8833_EscalateRunForward(&htim2, TIM_CHANNEL_2, 1500); // Escalate duty cycle on TIM_CHANNEL_2
+      HAL_Delay(1000); // Wait for 1 second before starting the reverse operation
+      //DRV8833_EscalateDutyCycle(&htim2, TIM_CHANNEL_2, 100); // Escalate duty cycle on TIM_CHANNEL_2 again
+       *
+*/
+
