@@ -11,25 +11,15 @@
 #endif
 
 
-#include <stdarg.h> // Required for variadic functions
 
-void userConsole(const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-
-    // Print formatted output to standard output; replace as needed
-    vprintf(format, args);
-
-    va_end(args);
-}
-
+void userConsole(const char *msg);
 
 /* If you are using C, you neeed to remove the below
  * function decleration. It work only on C++
  * this in case you want to use it for numbers.
  */
 
-void userConsole(int *format, ...);
+void userConsole(int);
 
 
 
